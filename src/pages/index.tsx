@@ -2,7 +2,7 @@
 // SSR
 // SSG
 
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { GetStaticProps } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,6 +12,7 @@ import { api } from "../services/api";
 import { convertDurationToTimeString } from "../utils/convertDurationToTimeString";
 
 import styles from "./home.module.scss";
+import { PlayerContext } from "../contexts/PlayerContext";
 
 type HomeProps = {
   // episodes: Array<Episode> // ou Episode[]
@@ -31,6 +32,8 @@ type Episode = {
 };
 
 export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
+  const { play } = useContext(PlayerContext)
+  
   //SPA
   // useEffect( () => {
   //   fetch('http://localhost:3333/episodes')
@@ -68,7 +71,7 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                   <span>{episode.durationAsString}</span>
                 </div>
 
-                <button type="button">
+                <button type="button" onClick={ () => play(episode)}>
                   <img src="/play-green.svg" alt="Tocar episódio" />
                 </button>
               </li>
@@ -114,7 +117,7 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                   <td style={{ width: 100 }}>{episode.publishedAt}</td>
                   <td>{episode.durationAsString}</td>
                   <td>
-                    <button type="button">
+                    <button type="button" onClick={ () => play(episode)}>
                       <img src="/play-green.svg" alt="Tocar episódio"/>
                     </button>
                   </td>
